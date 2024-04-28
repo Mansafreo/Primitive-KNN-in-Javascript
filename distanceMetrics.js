@@ -1,7 +1,7 @@
 //File that stores the distance metrics and their related functions
 function euclideanDistance(p1, p2){
     //Euclidean distance
-    return Math.sqrt(Math.pow(p1.x-p2.x,2)+Math.pow(p1.y-p2.y,2));
+    return Math.sqrt(Math.pow(p1.X-p2.X,2)+Math.pow(p1.Y-p2.Y,2));
 }
 function manhattanDistance(p1, p2){
     //Manhattan distance

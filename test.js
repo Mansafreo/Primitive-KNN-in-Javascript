@@ -8,18 +8,15 @@
 //Import the path module
 const path = require('path');
 //Load the data from points.csv
-let filePath= path.resolve(__dirname, 'points.csv');
-const fs = require('fs');
-let data =fs.readFileSync(filePath, 'utf8');
-//Each line is a data point
-//The first line is the header
-let lines = data.split('\n');
-let points = [];
-for(let i=1; i<lines.length; i++){
-    let line = lines[i].split(',');
-    points.push({x: parseFloat(line[0]), y: parseFloat(line[1]), group: line[2].replace(/\r/g,'')});
-}
-let knownPoints=points;
+let filename='points.csv'
+//Import the objectify class
+const Objectify = require('./objectify');
+let points = new Objectify.Objectify(filename);
+points.setFeatures(
+    ["X","Y","Group"],
+    ["float","float","string"]
+);
+let knownPoints=points.objects;
 //Now we have the data we can start the algorithm
 //Step 2: Define the distance function
 //Import the distanceMetrics module
@@ -53,7 +50,7 @@ function KNN(knownPoints,new_point,K)
     }
     nearest_neighbours.forEach(neighbour=>{
         //vote
-        group=neighbour.point.group;
+        group=neighbour.point.Group;
         votes[group]++
     })
     //Get the highest vote
@@ -62,20 +59,15 @@ function KNN(knownPoints,new_point,K)
 }
 //Step 4: Load the unknown data
 //Load the data from unknown.csv
-filePath= path.resolve(__dirname, 'unknown.csv');
-data =fs.readFileSync(filePath, 'utf8');
-//Each line is a data point
-//The first line is the header
-lines = data.split('\n');
-let unknownPoints = [];
-for(let i=1; i<lines.length; i++){
-    let line = lines[i].split(',');
-    unknownPoints.push({x: parseFloat(line[0]), y: parseFloat(line[1])});
-}
-
-
+let uknownDataFile='unknown.csv'
+let unknownPoints = new Objectify.Objectify(uknownDataFile);
+unknownPoints.setFeatures(
+    ["X","Y"],
+    ["float","float"]
+);
+unknownPoints=unknownPoints.objects;
 //To test the data
 unknownPoints.forEach(unknownPoint=>{
     let category=KNN(knownPoints,unknownPoint,K)
-    console.log(`(${unknownPoint.x},${unknownPoint.y})=>${category} \n`)
+    console.log(`(${unknownPoint.X},${unknownPoint.Y})=>${category} \n`)
 })
