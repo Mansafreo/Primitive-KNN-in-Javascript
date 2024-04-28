@@ -1,7 +1,7 @@
-# K-Nearest Algorithm in Javascript
+# K-Nearest Neighbour Algorithm in Javascript
 
 ## Introduction
-It is a machine learning algorithm that uses instance-based learning to classify items/data into groups. By instance-based learning, it means that the algorithm does not produce a model per se but uses stored 
+KNN is a machine learning algorithm that uses instance-based learning to classify items/data into groups. By instance-based learning, it means that the algorithm does not produce a model per se but uses stored 
 data/examples(instances) to classify the data it is given. As such , having labelled data is important.
 The algorithm works by calculating the distances between data and selecting a given number K (the hyperparameter) of neighbours(closest points) and classifying the new point as the majority class near it.
 
