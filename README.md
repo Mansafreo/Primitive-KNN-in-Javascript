@@ -15,3 +15,7 @@ This gives us a sample feature matrix
 `[ diameter, weight, colour , acidity, texture]` <br>
 However, note that the features are usually represented as numerical data. If the attributes are text, data encoding is done to convert the text into meaningful numeric data that can be used in the algorithm
 The data is usually split into the training data and the test data
+
+
+## Datasets Used
+[Diabetes KNN](https://www.kaggle.com/datasets/rajakali/diabetesknn)
