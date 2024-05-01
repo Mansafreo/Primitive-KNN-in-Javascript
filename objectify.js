@@ -9,7 +9,9 @@ class Objectify {
         this.data = null;
         this.objects = null;
         this.features=null;
+        this.featureDatatypes=null;
         this.objectifyData();
+        this.target=null;
     }
 
     getData() {
@@ -102,6 +104,24 @@ class Objectify {
             this.objects=interMid;
         }
         this.features=features
+        this.featureDatatypes=types
+    }
+    setTarget(target,dataType)
+    {
+        //Make sure target is valid and exists
+        if(!this.featureExists(target))
+        {
+            console.log(`Given Feature Target  ${target} does not exist`)
+            return
+        }
+        //Make sure datatype is a valid type
+        let featureIndex=this.features.indexOf(target);
+        if(this.featureDatatypes[featureIndex]!==dataType)
+        {
+            console.log(`The dataType for target ${target} does not match ${this.featureDatatypes[featureIndex]}`);
+            return
+        }
+        this.target=target
     }
     parseData(type,data) {
         //To return the parsed data in the form it is needed
@@ -118,13 +138,46 @@ class Objectify {
             return Boolean(data);
         }
     }
+    //To normalize the data
+    zScoreNormalization(feature) {
+        if(!this.featureExists(feature))
+        {
+            console.log(`The feature ${feature} does not exist`)
+        }
+        //Make sure datatype is a valid type
+        let featureIndex=this.features.indexOf(feature);
+        let featureType=this.featureDatatypes[featureIndex];
+        if(featureType!=="float" && featureType!=="int")
+        {
+            console.log(`ZSCORE ERROR:The dataType for ${feature}=>${featureType} is not a float or an int so it cannot be normalized`);
+            return
+        }
+        // Get all values for the feature
+        let values = this.objects.map(obj => parseFloat(obj[feature])).filter(value => !isNaN(value));
+        // Calculate the mean
+        let mean = values.reduce((a, b) => a + b, 0) / values.length;
+        // Calculate the standard deviation
+        let stdDev = Math.sqrt(values.map(value => Math.pow(value - mean, 2)).reduce((a, b) => a + b, 0) / values.length);
+        // Check if standard deviation is zero
+        if (stdDev === 0) {
+            console.log(`Warning: Standard deviation for feature '${feature}' is zero. Normalization not performed.`);
+            return;
+        }
+        // Normalize the values
+        this.objects.forEach(obj => {
+            let value = parseFloat(obj[feature]);
+            if (!isNaN(value)) {
+                obj[feature] = (value - mean) / stdDev;
+            }
+        });
+    }
+    featureExists(feature)
+    {
+        //Make sure target is valid and exists
+        return this.features.includes(feature)
+    }
+
 }
-
-// //Test the class
-// let testData=new Objectify('points.csv')
-// testData.setFeatures(['X','Y'],['float','float'])
-// console.log(testData.objects);
-
 //export the class
 module.exports={
     Objectify

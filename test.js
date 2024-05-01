@@ -5,17 +5,17 @@
 //The task is to group the unknown data points in the file unknown.csv using the data in points.csv
 
 //Step 1: Load the data
-//Import the path module
-const path = require('path');
 //Load the data from points.csv
 let filename='points.csv'
 //Import the objectify class
-const Objectify = require('./objectify');
-let points = new Objectify.Objectify(filename);
+const {Objectify }= require('./objectify');
+let points = new Objectify(filename);
 points.setFeatures(
     ["X","Y","Group"],
     ["float","float","string"]
 );
+points.zScoreNormalization('X');
+points.zScoreNormalization('Y');
 let knownPoints=points.objects;
 //Now we have the data we can start the algorithm
 //Step 2: Define the distance function
@@ -60,11 +60,13 @@ function KNN(knownPoints,new_point,K)
 //Step 4: Load the unknown data
 //Load the data from unknown.csv
 let uknownDataFile='unknown.csv'
-let unknownPoints = new Objectify.Objectify(uknownDataFile);
+let unknownPoints = new Objectify(uknownDataFile);
 unknownPoints.setFeatures(
     ["X","Y"],
     ["float","float"]
 );
+unknownPoints.zScoreNormalization('X');
+unknownPoints.zScoreNormalization('Y');
 unknownPoints=unknownPoints.objects;
 //To test the data
 unknownPoints.forEach(unknownPoint=>{
