@@ -16,7 +16,7 @@ data.setFeatures(
 data.setTarget('Outcome','string');//Outcome is the target column
 
 //Load the test data
-const testDataFile='test_data.csv';
+const testDataFile='test_patients.csv';
 const testData = new Objectify(testDataFile);
 //To set the features
 testData.setFeatures(
@@ -24,25 +24,25 @@ testData.setFeatures(
     ['float','float','float','float','float','float','float','float']
 );
 
-// //To zscore normalize the data
-data.zScoreNormalization('Pregnancies');
-data.zScoreNormalization('Glucose');
-data.zScoreNormalization('BloodPressure');
-data.zScoreNormalization('SkinThickness');
-data.zScoreNormalization('Insulin');
-data.zScoreNormalization('BMI');
-data.zScoreNormalization('DiabetesPedigreeFunction');
-data.zScoreNormalization('Age');
+//To min-max normalize the data
+data.minMaxNormalization('Pregnancies');
+data.minMaxNormalization('Glucose');
+data.minMaxNormalization('BloodPressure');
+data.minMaxNormalization('SkinThickness');
+data.minMaxNormalization('Insulin');
+data.minMaxNormalization('BMI');
+data.minMaxNormalization('DiabetesPedigreeFunction');
+data.minMaxNormalization('Age');
 
-// //Also normalize the test data
-testData.zScoreNormalization('Pregnancies');
-testData.zScoreNormalization('Glucose');
-testData.zScoreNormalization('BloodPressure');
-testData.zScoreNormalization('SkinThickness');
-testData.zScoreNormalization('Insulin');
-testData.zScoreNormalization('BMI');
-testData.zScoreNormalization('DiabetesPedigreeFunction');
-testData.zScoreNormalization('Age');
+//Also normalize the test data using min-max normalization
+testData.minMaxNormalization('Pregnancies');
+testData.minMaxNormalization('Glucose');
+testData.minMaxNormalization('BloodPressure');
+testData.minMaxNormalization('SkinThickness');
+testData.minMaxNormalization('Insulin');
+testData.minMaxNormalization('BMI');
+testData.minMaxNormalization('DiabetesPedigreeFunction');
+testData.minMaxNormalization('Age');
 
 //To predict the outcome of the test data
 let predictions=[]

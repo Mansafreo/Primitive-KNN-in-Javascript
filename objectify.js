@@ -171,6 +171,39 @@ class Objectify {
             }
         });
     }
+    //min-max normalization
+    minMaxNormalization(feature) {
+        if(!this.featureExists(feature))
+        {
+            console.log(`The feature ${feature} does not exist`)
+        }
+        //Make sure datatype is a valid type
+        let featureIndex=this.features.indexOf(feature);
+        let featureType=this.featureDatatypes[featureIndex];
+        if(featureType!=="float" && featureType!=="int")
+        {
+            console.log(`MINMAX ERROR:The dataType for ${feature}=>${featureType} is not a float or an int so it cannot be normalized`);
+            return
+        }
+        // Get all values for the feature
+        let values = this.objects.map(obj => parseFloat(obj[feature])).filter(value => !isNaN(value));
+        // Calculate the minimum value
+        let min = Math.min(...values);
+        // Calculate the maximum value
+        let max = Math.max(...values);
+        // Check if min and max are equal
+        if (min === max) {
+            console.log(`Warning: Minimum and maximum values for feature '${feature}' are equal. Normalization not performed.`);
+            return;
+        }
+        // Normalize the values
+        this.objects.forEach(obj => {
+            let value = parseFloat(obj[feature]);
+            if (!isNaN(value)) {
+                obj[feature] = (value - min) / (max - min);
+            }
+        });
+    }
     featureExists(feature)
     {
         //Make sure target is valid and exists
